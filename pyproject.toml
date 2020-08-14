@@ -1,0 +1,35 @@
+[tool.poetry]
+authors = ["Andrii Sherman"]
+description = "Reimplementation of https://github.com/tilman151/unittest_dl using pytest"
+name = "pytest_dl"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+scipy = "^1.5.2"
+tensorboard = "^2.3.0"
+torch = "^1.6.0"
+torchvision = "^0.7.0"
+tqdm = "^4.48.2"
+typer = "^0.3.1"
+
+[tool.poetry.dev-dependencies]
+autoflake = "^1.3.1"
+black = "^19.10b0"
+flake9 = "^3.8.3"
+isort = "^5.4.1"
+pytest = "^6.0.1"
+pytest_mock = "^3.2.0"
+
+[tool.isort]
+profile = "black"
+
+[tool.flake8]
+exclude = ".git,__pycache__"
+ignore = "E501, W503"
+
+[tool.pytest.ini_options]
+
+[build-system]
+build-backend = "poetry.masonry.api"
+requires = ["poetry>=0.12"]
