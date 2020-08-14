@@ -10,11 +10,24 @@ from torch.utils.data import Subset
 from pytest_dl import dataset, model, trainer
 
 
-@pytest.fixture(scope="module")
-def f_trainer():
+@pytest.fixture(
+    scope="module",
+    params=[
+        "cpu",
+        pytest.param(
+            "cuda:0",
+            marks=pytest.mark.skipif(
+                not torch.cuda.is_available(), reason="No GPU was detected"
+            ),
+        ),
+    ],
+)
+def f_trainer(request):
     seed = 42
     torch.manual_seed(seed)
     np.random.seed(seed)
+
+    device = request.param
 
     # Build dataset with only one batch
     data = dataset.MyMNIST()
@@ -28,7 +41,7 @@ def f_trainer():
         data,
         optim,
         batch_size=4,
-        device="cpu",
+        device=device,
         log_dir=log_dir,
         num_generated_images=1,
     )

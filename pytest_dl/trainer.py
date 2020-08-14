@@ -69,6 +69,7 @@ class Trainer:
 
     def _calc_loss(self, batch):
         inputs, _ = batch
+        inputs = inputs.to(self.device)
         mu, log_sigma = self.model.encode(inputs)
         latent_code = self.model.bottleneck(mu, log_sigma)
         outputs = self.model.decode(latent_code)
@@ -96,6 +97,7 @@ class Trainer:
         self.model.eval()
 
         samples = torch.stack([self.data.test_data[i][0] for i in range(n)])
+        samples = samples.to(self.device)
         images = self.model(samples)
         images = torch.cat([samples, images], dim=3)
 
@@ -118,4 +120,4 @@ class Trainer:
 
     def _save_model(self):
         save_path = os.path.join(self.log_dir, f"model_{str(self._epoch).zfill(3)}.pth")
-        torch.save(self.model.cpu(), save_path)
+        torch.save(self.model, save_path)
