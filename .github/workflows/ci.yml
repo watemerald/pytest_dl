@@ -22,4 +22,5 @@ jobs:
           args: run python -m pytest --cov=pytest_dl --cov-report=xml tests/
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
-        file: ./coverage.xml
+        with:
+          file: ./coverage.xml
