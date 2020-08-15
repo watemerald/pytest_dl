@@ -1,0 +1,22 @@
+name: Test model
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        uses: abatilo/actions-poetry@v1.5.0
+        with:
+          python_version: 3.8
+          poetry_version: 1.0
+          args: install
+      - name: Run pytest
+        uses: abatilo/actions-poetry@v1.5.0
+        with:
+          python_version: 3.8
+          poetry_version: 1.0
+          args: run python -m pytest --cov=pytest_dl
