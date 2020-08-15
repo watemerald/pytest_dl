@@ -4,11 +4,6 @@ import torch
 from pytest_dl import model
 
 
-# def pytest_generate_tests(metafunc):
-#     if "net" in metafunc.fixturenames:
-#         metafunc.parametrize("net", ["cnn", "mlp"], indirect=True)
-
-
 @pytest.fixture(scope="module", params=["cnn", "mlp"])
 def net(request):
     if request.param == "cnn":

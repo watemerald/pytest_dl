@@ -22,7 +22,7 @@ from pytest_dl import dataset, model, trainer
         ),
     ],
 )
-def f_trainer(request):
+def vae_trainer(request):
     seed = 42
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -46,15 +46,13 @@ def f_trainer(request):
         num_generated_images=1,
     )
 
-    yield dict(data=data, vae_trainer=vae_trainer)
+    yield vae_trainer
 
     shutil.rmtree(log_dir)
 
 
 @torch.no_grad()
-def test_kl_divergence(f_trainer):
-    vae_trainer = f_trainer["vae_trainer"]
-
+def test_kl_divergence(vae_trainer):
     mu = np.random.randn(10) * 0.25
     sigma = np.random.randn(10) * 0.1 + 1
     standard_normal_samples = np.random.randn(100000, 10)
@@ -83,9 +81,7 @@ def test_kl_divergence(f_trainer):
     assert actual_kl_div.item() == pytest.approx(expected_kl_div, abs=0.05)
 
 
-def test_overfit_on_one_batch(f_trainer):
-    vae_trainer = f_trainer["vae_trainer"]
-
+def test_overfit_on_one_batch(vae_trainer):
     # Overfit on single batch
     vae_trainer.train(500)
 
@@ -94,9 +90,7 @@ def test_overfit_on_one_batch(f_trainer):
     assert vae_trainer.eval() <= 300
 
 
-def test_logging(f_trainer, mocker):
-    vae_trainer = f_trainer["vae_trainer"]
-
+def test_logging(vae_trainer, mocker):
     add_scalar_mock = mocker.patch.object(vae_trainer.summary, "add_scalar")
 
     vae_trainer.train(1)
